@@ -10,18 +10,19 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
 app.use(bodyParser.json());
 
-app.get("/users", (req, res) => {
-  let users = [];
-  db.query("SELECT * FROM user", (err, rows) => {
-    if (err) {
-      console.log(err);
-      return;
-    }
-    users = rows;
-    res.json(users);
-  });
-});
+// user 조회
+app.get('/user/:user_id', (req, res) => {
+  const userId = req.params.user_id
+  console.log(userId);
+  db.query('SELECT * FROM user WHERE user_id = ?', userId, (err, row) => {
+    console.log(row);
+    if(err) console.log(err);
+    if(row.length === 0) return res.status(400).send('존재하지 않는 user');
+    return res.json(row[0]);
+  })
+})
 
+// user 테이블에 데이터 삽입
 app.post("/register", (req, res) => {
   const params = [
     req.body.email,
@@ -41,7 +42,7 @@ app.post("/register", (req, res) => {
   res.sendStatus(200).send("Success");
 });
 
-//
+// 로그인
 app.post("/login", (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
@@ -53,6 +54,14 @@ app.post("/login", (req, res) => {
     return res.status(200).send('로그인 성공');
   });
 });
+
+// 게시글 리스트 조회
+app.get('/post', (req, res) => {
+  db.query('SELECT * FROM post', (err, rows) => {
+    if(err) console.log(err);
+    return res.status(200).json(rows);
+  })
+})
 
 app.listen(port, () => {
   console.log(`Run Server: ${port}`);
