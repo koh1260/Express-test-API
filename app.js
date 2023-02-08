@@ -7,11 +7,19 @@ const session = require('express-session');
 const MySQLStore = require("express-mysql-session")(session);
 require("dotenv").config();
 
-const sessionStore = MySQLStore({}, db);
+var options = {
+  host: '127.0.0.1',
+  port: 3306,
+  user: "hs",
+  password: "root",
+  database: "instagram",
+};
+
+var sessionStore = new MySQLStore(options);
 // use
 app.use(session({
 	key: 'session_cookie_name',
-	secret: 'asadasda*#$a4sd2$@#s2^s6d562d',
+	secret: process.env.SESSION_SECRET,
 	store: sessionStore,
 	resave: false,
 	saveUninitialized: false
@@ -54,8 +62,9 @@ app.post("/register", (req, res) => {
 
 // 로그인, 세션 생성
 app.post("/login", (req, res) => {
-  const email = req.body.email;
-  const password = req.body.password;
+  const body = req.body;
+  const email = body.email;
+  const password = body.password;
 
   db.query("SELECT * FROM user WHERE email = ?", email, (err, row) => {
     if (err) console.log(err);
@@ -67,6 +76,8 @@ app.post("/login", (req, res) => {
     return res.status(200).send("로그인 성공");
   });
 });
+
+
 
 // 게시글 리스트 조회
 app.get("/post", (req, res) => {
