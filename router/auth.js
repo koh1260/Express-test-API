@@ -20,7 +20,7 @@ router.use(
     secret: process.env.SESSION_SECRET,
     store: sessionStore,
     resave: false,
-    saveUninitialized: false,
+    saveUninitialized: true,
   })
 );
 
@@ -72,22 +72,20 @@ router.post("/login", (req, res) => {
       return res.status(401).send("비밀번호 불일치");
     req.session.is_logined = true;
     req.session.nickname = row[0].nickname;
-    return res.status(200).send(req.session);
+    console.log(req.session);
+    return res.status(200).json({"user_id" : row[0].user_id});
   });
 });
 
+// 로그아웃, 세션 삭제
 router.get("/logout", (req, res) => {
   const session = req.session;
 
-  if (session.is_logined) {
-    req.session.destroy((err) => {
-      if (err) {
-        console.log(err);
-      } else {
-        return res.status(200).send("logout success");
-      }
-    });
-  }
+  if(!session) return res.status(400).send('no session');
+  req.session.destroy((err) => {
+    console.log(err);
+  });
+  return res.status(200).send('session destroy');
 });
 
 module.exports = router;
