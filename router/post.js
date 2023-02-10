@@ -2,10 +2,11 @@ const express = require("express");
 const router = express.Router();
 const db = require("../db");
 
-router.get("/", (req, res) => {
+router.post("/", (req, res) => {
   const user_id = req.body.user_id;
+  console.log(user_id);
 
-  db.query("SELECT follower from follow where following = ?", user_id,(err, rows) => {
+  db.query("SELECT follower FROM follow WHERE following = ?", user_id, (err, rows) => {
       if (err) {
         console.log(err);
         return res.status(400).send("Bad request");
