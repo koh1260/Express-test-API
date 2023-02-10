@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const db = require("../db");
+const db = require("../db").default;
 const session = require("express-session");
 const MySQLStore = require("express-mysql-session")(session);
 
@@ -64,7 +64,7 @@ router.post("/login", (req, res) => {
   const password = body.password;
 
   if (Object.keys(body).length === 0) return res.status(400).send("no data");
-  
+
   db.query("SELECT * FROM user WHERE email = ?", email, (err, row) => {
     if (err) console.log(err);
     if (row.length === 0) return res.status(404).send("존재하지 않는 계정");

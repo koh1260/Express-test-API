@@ -1,5 +1,5 @@
 require('dotenv').config();
-const mysql = require('mysql2');
+import { createConnection } from 'mysql2';
 
 const options = {
     host: process.env.DB_HOST,
@@ -9,8 +9,8 @@ const options = {
     port: process.env.DB_PORT,
     multipleStatements: true
 };
-const db = mysql.createConnection(options);
+const db = createConnection(options);
 
 db.connect();
 
-module.exports = db;
+export default db;
