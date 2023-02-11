@@ -1,7 +1,8 @@
 const { Sequelize, DataTypes, Model, DatabaseError } = require("sequelize");
+const {User} = require('../user/models');
 require("dotenv").config();
 const sequelize = require('../sequelize/sequelize');
-const User = require('../user/models');
+
 
 
 class Post extends Model {}
@@ -35,18 +36,18 @@ Post.init(
 class Image extends Model{}
 Image.init(
   {
-    imaeg_id: {
+    imaegId: {
       type:DataTypes.INTEGER,
       primaryKey:true,
       autoIncrement: true,
     },
-    postId: {
-      type:DataTypes.INTEGER,
-      references: {
-        model: Post,
-        key: 'postId',
-      }
-    },
+    // postId: {
+    //   type:DataTypes.INTEGER,
+    //   references: {
+    //     model: Post,
+    //     key: 'postId',
+    //   }
+    // },
     imageUrl: {
       type: DataTypes.STRING,
       allowNull:false,
@@ -89,6 +90,15 @@ PostLikes.init(
 );
 PostLikes.removeAttribute('id'); // id 삭제
 
+Post.hasMany(Image, {
+    foreignKey: 'postId',
+    allowNull: false,
+    onDelete: 'cascade'
+})
+Image.belongsTo(Post, {
+    foreignKey: 'postId'
+})
+
 // async function test(){
 //     const post = await Post.create(
 //         {
@@ -99,5 +109,12 @@ PostLikes.removeAttribute('id'); // id 삭제
 //     console.log(post.toJSON());
 // }
 // test()
+// async function update(){
+//     await Post.sync({alter: true});
+//     await Image.sync({alter: true});
+// }
+// update();
 
-module.exports = Post;
+module.exports = {
+    Post, Image
+};
