@@ -41,13 +41,6 @@ Image.init(
       primaryKey:true,
       autoIncrement: true,
     },
-    // postId: {
-    //   type:DataTypes.INTEGER,
-    //   references: {
-    //     model: Post,
-    //     key: 'postId',
-    //   }
-    // },
     imageUrl: {
       type: DataTypes.STRING,
       allowNull:false,
@@ -110,22 +103,11 @@ Comment.belongsTo(Post, {
     foreignKey: 'postId'
 })
 
-
-// async function test(){
-//     const post = await Post.create(
-//         {
-//             userId: 1,
-//             content: 'test'
-//         }
-//     );
-//     console.log(post.toJSON());
+// async function update(){
+//     await Post.sync({alter: true});
+//     await Image.sync({alter: true});
 // }
-// test()
-async function update(){
-    await Post.sync({alter: true});
-    await Image.sync({alter: true});
-}
-update();
+// update();
 
 module.exports = {
     Post, Image

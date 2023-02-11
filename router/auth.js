@@ -3,6 +3,8 @@ const router = express.Router();
 // const db = require("../db");
 const session = require("express-session");
 const MySQLStore = require("express-mysql-session")(session);
+// controllers
+const {login} = require('../user/controllers');
 
 var options = {
   host: process.env.DB_HOST,
@@ -23,6 +25,14 @@ router.use(
     saveUninitialized: true,
   })
 );
+
+// 로그인
+router.post('/login', (req, res) => {
+    login(req, res);
+})
+
+
+
 
 // // user 조회
 // router.get("/user/:user_id", (req, res) => {
@@ -87,4 +97,4 @@ router.use(
 //   return res.status(200).send('session destroy');
 // });
 
-// module.exports = router;
+module.exports = router;

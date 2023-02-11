@@ -6,7 +6,7 @@ const { getListObjectValue } = require("./service");
 // 유저 아이디 받음, 그 아이디로 팔로잉 검색, 팔로잉 의 게시물 전체 조회.
 
 async function postsView(req, res) {
-  const userId = req.body.user_id;
+  const userId = req.body.userId;
   const followingsObj = await Follow.findAll({
     attributes: ["follower"],
     where: {
@@ -22,7 +22,7 @@ async function postsView(req, res) {
       },
     },
     include: [
-        {model:Image, required: true},
+        {model:Image, required: true, attributes: ['imageUrl']},
         {model:Comment}
     ]
   });

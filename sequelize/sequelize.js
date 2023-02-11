@@ -26,32 +26,4 @@ async function test() {
   }
 }
 
-// the defined model is the class itself
-// console.log(User === sequelize.models.User); // true
-
-// async function createTable() {
-//   await User.sync({ alter:true });
-//   await Post.sync({ alter:true });
-//   await Comment.sync({ alter:true });
-//   await CommentLikes.sync({alter:true});
-//   await Follow.sync({alter:true});
-//   await PostLikes.sync({alter:true});
-//   await Image.sync({alter:true});
-
-//   console.log("All models were synchronized successfully.");
-// }
-
-
-// async function dropUserTable() {
-//   await User.drop();
-//   console.log("User table dropped!");
-// }
-// async function dropAll() {
-//   await sequelize.drop();
-//   console.log("All tables dropped!");
-// }
-// // dropAll();
-// createTable();
-// // console.log(sequelize.models);
-
 module.exports = sequelize;

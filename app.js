@@ -17,7 +17,7 @@ app.use(bodyParser.json());
 
 
 // auth
-// app.use('/auth', auth);
+app.use('/auth', auth);
 // post
 app.use('/post', post);
 
