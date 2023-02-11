@@ -13,14 +13,6 @@ Post.init(
       primaryKey: true,
       autoIncrement: true,
     },
-    userId: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: User,
-        key: "userId",
-      },
-      allowNull: false,
-    },
     content: {
       type: DataTypes.STRING,
     },

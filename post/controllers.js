@@ -1,6 +1,6 @@
 const {Post, Image} = require("./models");
 const {Comment} = require('../comment/models');
-const { Follow } = require("../user/models");
+const {User, Follow } = require("../user/models");
 const {Op} = require("sequelize");
 const { getListObjectValue } = require("./service");
 // 유저 아이디 받음, 그 아이디로 팔로잉 검색, 팔로잉 의 게시물 전체 조회.
@@ -23,7 +23,8 @@ async function postsView(req, res) {
     },
     include: [
         {model:Image, required: true, attributes: ['imageUrl']},
-        {model:Comment}
+        {model:Comment},
+        {model:User, required: true}, 
     ]
   });
   const postsArray = postsObject.map(post => post.toJSON());

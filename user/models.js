@@ -1,4 +1,5 @@
 const { Sequelize, DataTypes, Model, DatabaseError } = require("sequelize");
+const {Post} = require('../post/models');
 require("dotenv").config();
 const sequelize = require('../sequelize/sequelize');
 
@@ -67,6 +68,20 @@ Follow.init(
 );
 Follow.removeAttribute('id');
 
+User.hasMany(Post, {
+  foreignKey: 'userId',
+  allowNull: false,
+  onDelete: 'cascade'
+})
+Post.belongsTo(User, {
+  foreignKey: 'userId'
+})
+
+// async function update(){
+//   await User.sync({alter: true});
+//   await Post.sync({alter: true});
+// }
+// update()
 
 module.exports = {
     User, Follow,
