@@ -7,7 +7,7 @@ const cors = require("cors");
 require("dotenv").config();
 
 const corsOptions = {
-  origin: 'http://localhost:3001',
+  origin: 'http://localhost:3000',
   credential: true
 }
 

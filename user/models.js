@@ -30,6 +30,9 @@ User.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    profileImage: {
+      type:DataTypes.STRING,
+    }
   },
   {
     sequelize,
@@ -68,6 +71,7 @@ Follow.init(
 );
 Follow.removeAttribute('id');
 
+// 1:N , User Post
 User.hasMany(Post, {
   foreignKey: 'userId',
   allowNull: false,

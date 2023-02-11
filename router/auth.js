@@ -6,7 +6,7 @@ const MySQLStore = require("express-mysql-session")(session);
 // controllers
 const {login} = require('../user/controllers');
 
-var options = {
+const options = {
   host: process.env.DB_HOST,
   port: process.env.DB_PORT,
   user: process.env.DB_USER,
@@ -14,7 +14,7 @@ var options = {
   database: process.env.DB_TEST_NAME,
 };
 
-var sessionStore = new MySQLStore(options);
+const sessionStore = new MySQLStore(options);
 // use
 router.use(
   session({

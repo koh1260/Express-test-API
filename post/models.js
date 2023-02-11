@@ -75,7 +75,7 @@ PostLikes.init(
 );
 PostLikes.removeAttribute('id'); // id 삭제
 
-// post, image, 1:n 외래키
+// 1:N, Post Image
 Post.hasMany(Image, {
     foreignKey: 'postId',
     allowNull: false,
@@ -85,7 +85,7 @@ Image.belongsTo(Post, {
     foreignKey: 'postId'
 })
 
-// post, comment, 1:n 외래키
+// 1:N, Post Comment
 Post.hasMany(Comment, {
     foreignKey: 'postId',
     allowNull: false,
