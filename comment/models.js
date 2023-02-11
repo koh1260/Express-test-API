@@ -70,3 +70,7 @@ CommentLikes.init(
 );
 
 CommentLikes.removeAttribute('id'); // id 삭제
+
+module.exports = {
+    Comment, 
+}

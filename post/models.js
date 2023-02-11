@@ -1,8 +1,8 @@
 const { Sequelize, DataTypes, Model, DatabaseError } = require("sequelize");
 const {User} = require('../user/models');
+const {Comment} = require('../comment/models');
 require("dotenv").config();
 const sequelize = require('../sequelize/sequelize');
-
 
 
 class Post extends Model {}
@@ -90,6 +90,7 @@ PostLikes.init(
 );
 PostLikes.removeAttribute('id'); // id 삭제
 
+// post, image, 1:n 외래키
 Post.hasMany(Image, {
     foreignKey: 'postId',
     allowNull: false,
@@ -98,6 +99,17 @@ Post.hasMany(Image, {
 Image.belongsTo(Post, {
     foreignKey: 'postId'
 })
+
+// post, comment, 1:n 외래키
+Post.hasMany(Comment, {
+    foreignKey: 'postId',
+    allowNull: false,
+    onDelete: 'cascade'
+})
+Comment.belongsTo(Post, {
+    foreignKey: 'postId'
+})
+
 
 // async function test(){
 //     const post = await Post.create(
@@ -109,11 +121,11 @@ Image.belongsTo(Post, {
 //     console.log(post.toJSON());
 // }
 // test()
-// async function update(){
-//     await Post.sync({alter: true});
-//     await Image.sync({alter: true});
-// }
-// update();
+async function update(){
+    await Post.sync({alter: true});
+    await Image.sync({alter: true});
+}
+update();
 
 module.exports = {
     Post, Image

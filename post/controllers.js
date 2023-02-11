@@ -1,4 +1,5 @@
 const {Post, Image} = require("./models");
+const {Comment} = require('../comment/models');
 const { Follow } = require("../user/models");
 const {Op} = require("sequelize");
 const { getListObjectValue } = require("./service");
@@ -21,7 +22,8 @@ async function postsView(req, res) {
       },
     },
     include: [
-        {model:Image}
+        {model:Image, required: true},
+        {model:Comment}
     ]
   });
   const postsArray = postsObject.map(post => post.toJSON());
