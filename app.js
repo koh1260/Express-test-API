@@ -21,13 +21,6 @@ app.use('/auth', auth);
 // post
 app.use('/post', post);
 
-// 게시글 리스트 조회
-// app.get("/post", (req, res) => {
-//   db.query("SELECT * FROM post", (err, rows) => {
-//     if (err) console.log(err);
-//     return res.status(200).json(rows);
-//   });
-// });
 
 function compare(row){
   

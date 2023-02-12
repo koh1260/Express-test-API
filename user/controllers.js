@@ -1,25 +1,27 @@
 const { User } = require("./models");
 const bcrypt = require("bcrypt");
-const { findByScript } = require("forever");
 
 // 로그인
 async function login(req, res) {
   const email = req.body.email;
   const password = req.body.password;
 
-  const user = await User.findAll({
-    raw: true,
-    where: {
-      email: email,
-    },
-  });
-  if (user.length === 0) return res.status(404).send("아이디 없음");
-  
-  if (!(bcrypt.compareSync(password, user[0].password)))
-    return res.status(400).send("비밀번호 틀림");
-  req.session.isLogined = true;
-  req.session.nickname = user[0].nickname;
-  return res.status(200).json({ userId: user[0].userId });
+  try {
+    const user = await User.findAll({
+      raw: true,
+      where: {
+        email: email,
+      },
+    });
+    if (user.length === 0) return res.status(404).send("아이디 없음");
+    if (!bcrypt.compareSync(password, user[0].password))
+      return res.status(400).send("비밀번호 틀림");
+    req.session.isLogined = true;
+    req.session.nickname = user[0].nickname;
+    return res.status(200).json({ userId: user[0].userId });
+  } catch (err) {
+    console.log(err);
+  }
 }
 
 function isLogined(req, res, next) {
