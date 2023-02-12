@@ -2,6 +2,7 @@ const { User } = require("./models");
 const bcrypt = require("bcrypt");
 const { findByScript } = require("forever");
 
+// 로그인
 async function login(req, res) {
   const email = req.body.email;
   const password = req.body.password;
@@ -13,7 +14,8 @@ async function login(req, res) {
     },
   });
   if (user.length === 0) return res.status(404).send("아이디 없음");
-  if (password !== user[0].password)
+  
+  if (!(bcrypt.compareSync(password, user[0].password)))
     return res.status(400).send("비밀번호 틀림");
   req.session.isLogined = true;
   req.session.nickname = user[0].nickname;
@@ -27,7 +29,6 @@ function isLogined(req, res, next) {
 // 회원가입
 async function signUp(req, res) {
   const body = req.body;
-  console.log(body);
   const signUpData = {
     email: body.email,
     name: body.name,
@@ -35,6 +36,7 @@ async function signUp(req, res) {
     password: body.password,
     profileImage: body.profileImage,
   };
+
   try {
     const emailCheck = await User.findOne({
       where: { email: signUpData.email },
@@ -47,14 +49,14 @@ async function signUp(req, res) {
 
     const salt = bcrypt.genSaltSync(10);
     const hash = bcrypt.hashSync(signUpData.password, salt);
-    const newUser = await User.create({
+    await User.create({
       email: signUpData.email,
       name: signUpData.name,
       nickname: signUpData.nickname,
       password: hash,
       profileImage: signUpData.profileImage,
     });
-    return res.status(200).json(newUser);
+    return res.status(200).send(newUser);
   } catch (err) {
     console.log(err);
   }
