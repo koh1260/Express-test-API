@@ -20,4 +20,23 @@ async function login(){
     return console.log('로그인 성공');
 }
 
-login();
+async function signUp(){
+    const email = 'asssssd@gmail.com';
+    const nickname = 'elephant';
+
+    const emailCheck = await User.findOne({where: {email: email}});// 빈 값이면 null 반환
+    if(emailCheck) return res.status(400).send('이미 존재하는 아이디');
+    const nicknameCheck = await User.findOne({where:{nickname: nickname}});
+    if(nicknameCheck) return res.status(400).send('이미 존재하는 닉네임');
+    const newUser = await User.create(
+        {
+            name: 'test',
+            password: '1234',
+            email: email,
+            nickname: nickname,
+        }
+    )
+    console.log('가입 성공');
+    console.log(newUser);
+}
+signUp();

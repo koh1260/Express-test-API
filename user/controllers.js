@@ -1,24 +1,67 @@
-const {User} = require('./models');
+const { User } = require("./models");
+const bcrypt = require("bcrypt");
+const { findByScript } = require("forever");
 
-async function login(req, res){
-    const email = req.body.email;
-    const password = req.body.password
+async function login(req, res) {
+  const email = req.body.email;
+  const password = req.body.password;
 
-    const user = await User.findAll(
-        {
-            raw: true,
-            where: {
-                email: email
-            }
-        }
-    )
-    if(user.length === 0) return res.status(404).send('아이디 없음');
-    if(password !== user[0].password) return res.status(400).send('비밀번호 틀림');
-    req.session.is_logined = true;
-    req.session.nickname = user[0].nickname;
-    return res.status(200).json({"userId" : user[0].userId});
+  const user = await User.findAll({
+    raw: true,
+    where: {
+      email: email,
+    },
+  });
+  if (user.length === 0) return res.status(404).send("아이디 없음");
+  if (password !== user[0].password)
+    return res.status(400).send("비밀번호 틀림");
+  req.session.isLogined = true;
+  req.session.nickname = user[0].nickname;
+  return res.status(200).json({ userId: user[0].userId });
+}
+
+function isLogined(req, res, next) {
+  return req.session.isLogined;
+}
+
+// 회원가입
+async function signUp(req, res) {
+  const body = req.body;
+  console.log(body);
+  const signUpData = {
+    email: body.email,
+    name: body.name,
+    nickname: body.nickname,
+    password: body.password,
+    profileImage: body.profileImage,
+  };
+  try {
+    const emailCheck = await User.findOne({
+      where: { email: signUpData.email },
+    }); // 빈 값이면 null 반환
+    if (emailCheck) return res.status(400).send("이미 존재하는 아이디");
+    const nicknameCheck = await User.findOne({
+      where: { nickname: signUpData.nickname },
+    });
+    if (nicknameCheck) return res.status(400).send("이미 존재하는 닉네임");
+
+    const salt = bcrypt.genSaltSync(10);
+    const hash = bcrypt.hashSync(signUpData.password, salt);
+    const newUser = await User.create({
+      email: signUpData.email,
+      name: signUpData.name,
+      nickname: signUpData.nickname,
+      password: hash,
+      profileImage: signUpData.profileImage,
+    });
+    return res.status(200).json(newUser);
+  } catch (err) {
+    console.log(err);
+  }
 }
 
 module.exports = {
-    login, 
-}
+  login,
+  isLogined,
+  signUp,
+};

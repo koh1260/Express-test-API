@@ -4,7 +4,7 @@ const router = express.Router();
 const session = require("express-session");
 const MySQLStore = require("express-mysql-session")(session);
 // controllers
-const {login} = require('../user/controllers');
+const { login, signUp, isLogined } = require("../user/controllers");
 
 const options = {
   host: process.env.DB_HOST,
@@ -27,12 +27,13 @@ router.use(
 );
 
 // 로그인
-router.post('/login', (req, res) => {
-    login(req, res);
-})
-
-
-
+router.post("/login", (req, res) => {
+  login(req, res);
+});
+// 회원가입
+router.post("/sign_up", (req, res) => {
+  signUp(req, res);
+});
 
 // // user 조회
 // router.get("/user/:user_id", (req, res) => {
@@ -74,7 +75,7 @@ router.post('/login', (req, res) => {
 //   const password = body.password;
 
 //   if (Object.keys(body).length === 0) return res.status(400).send("no data");
-  
+
 //   db.query("SELECT * FROM user WHERE email = ?", email, (err, row) => {
 //     if (err) console.log(err);
 //     if (row.length === 0) return res.status(404).send("존재하지 않는 계정");
