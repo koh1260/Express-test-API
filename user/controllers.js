@@ -16,14 +16,13 @@ async function login(req, res) {
     if (user.length === 0) return res.status(404).send("아이디 없음");
     if (!bcrypt.compareSync(password, user[0].password))
       return res.status(400).send("비밀번호 틀림");
-    req.session.user = {
-        isLogined: true,
-        email: email,
-        nickname: user[0].nickname
+    if (req.session.user === undefined) {
+      req.session.isLogined = true;
+      req.session.userId = user[0].userId;
     }
-    req.session.save();
-    console.log(req.session);
-    return res.status(200).json({ userId: user[0].userId });
+    req.session.save(() => {
+      return res.status(200).send('로그인 성공');
+    });
   } catch (err) {
     console.log(err);
   }
@@ -69,8 +68,16 @@ async function signUp(req, res) {
   }
 }
 
+function logout(req, res) {
+    req.session.destroy((err) => {
+      if (err) return res.status(500).send(err);
+      return res.status(200).send("세션 삭제 완료");
+    });
+}
+
 module.exports = {
   login,
   isLogined,
   signUp,
+  logout,
 };

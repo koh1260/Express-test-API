@@ -6,15 +6,14 @@ const { getListObjectValue } = require("./service");
 const { sequelize } = require("sequelize/lib/model");
 
 async function postsView(req, res) {
-  const userId = req.body.userId;
-  console.log(req.session);
-  if (!userId) return res.status(400).send("로그인하세요");
+  if(!req.session.isLogined) return res.status(401).send('로그인 해');
+  const userId = req.session.userId;
 
   try {
     const followingsObj = await Follow.findAll({
       attributes: ["follower"],
       where: {
-        following: userId,
+        following: userId
       },
     });
     if (followingsObj.length === 0) return res.status(200).json([]);

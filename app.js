@@ -4,13 +4,14 @@ const bodyParser = require("body-parser");
 const auth = require('./router/auth');
 const post = require('./router/post');
 const cors = require("cors");
-const cookieParser = require('cookie-parser')
+// const cookieParser = require('cookie-parser');
 const session = require("express-session");
+// const FileStore = require('session-file-store')(session);
 const MySQLStore = require("express-mysql-session")(session);
 require("dotenv").config();
 
 
-const options = {
+const dbOptions = {
   host: process.env.DB_HOST,
   port: process.env.DB_PORT,
   user: process.env.DB_USER,
@@ -18,31 +19,23 @@ const options = {
   database: process.env.DB_TEST_NAME,
 };
 
-const sessionStore = new MySQLStore(options);
+const sessionStore = new MySQLStore(dbOptions);
 
 // use
-app.use(cookieParser());
+// app.use(cookieParser());
 app.use(
   session({
     key: "session_cookie_name",
     secret: process.env.SESSION_SECRET,
     store: sessionStore,
     resave: false,
-    saveUninitialized: true,
-    cookie: {
-      httpOnly: true,
-      secure: false,
-      maxAge: 1000 * 60 * 60 * 24 * 365
-  }
+    saveUninitialized: false,
   })
 );
 
-const corsOptions = {
-  origin: 'http://localhost:3000',
-  credential: true
-}
 app.use(cors({
   origin: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   credentials: true
 }));
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -54,10 +47,6 @@ app.use('/auth', auth);
 // post
 app.use('/post', post);
 
-
-function compare(row){
-  
-}
 
 app.listen(process.env.SERVER_PORT, () => {
   console.log(`Run Server`);
