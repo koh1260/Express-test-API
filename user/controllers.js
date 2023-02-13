@@ -16,8 +16,13 @@ async function login(req, res) {
     if (user.length === 0) return res.status(404).send("아이디 없음");
     if (!bcrypt.compareSync(password, user[0].password))
       return res.status(400).send("비밀번호 틀림");
-    req.session.isLogined = true;
-    req.session.nickname = user[0].nickname;
+    req.session.user = {
+        isLogined: true,
+        email: email,
+        nickname: user[0].nickname
+    }
+    req.session.save();
+    console.log(req.session);
     return res.status(200).json({ userId: user[0].userId });
   } catch (err) {
     console.log(err);

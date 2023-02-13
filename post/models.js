@@ -95,6 +95,8 @@ Comment.belongsTo(Post, {
     foreignKey: 'postId'
 })
 
+
+
 // async function update(){
 //     await Post.sync({alter: true});
 //     await Image.sync({alter: true});
