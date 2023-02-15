@@ -39,4 +39,14 @@ async function signUp(){
     console.log('가입 성공');
     console.log(newUser);
 }
-signUp();
+
+async function userInfo(){
+    const userId = 11;
+    
+    const userInfo = await User.findOne({where: {userId: userId}})
+    if(!userInfo) return console.log('업셪ㅇ');
+    console.log(userInfo);
+}
+
+
+userInfo();

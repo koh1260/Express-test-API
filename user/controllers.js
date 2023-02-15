@@ -68,6 +68,7 @@ async function signUp(req, res) {
   }
 }
 
+// 로그아웃
 function logout(req, res) {
     req.session.destroy((err) => {
       if (err) return res.status(500).send(err);
@@ -75,9 +76,19 @@ function logout(req, res) {
     });
 }
 
+// 단일 회원 정보 조회
+async function userInfo(req, res){
+  const userId = req.session.userId;
+  
+  const userInfo = await User.findOne({where: {userId: userId}})
+  if(!userInfo) return res.status(404).send('존재하지 않는 정보');
+  return res.status(200).json(userInfo.toJSON());
+}
+
 module.exports = {
   login,
   isLogined,
   signUp,
   logout,
+  userInfo,
 };

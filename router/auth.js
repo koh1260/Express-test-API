@@ -1,7 +1,5 @@
 const express = require("express");
 const router = express.Router();
-// const db = require("../db");
-// controllers
 const { login, signUp, isLogined, logout } = require("../user/controllers");
 
 
@@ -16,6 +14,9 @@ router.post("/sign_up", (req, res) => {
 // 로그아웃
 router.get("/logout", (req, res) => {
   logout(req, res);
+})
+router.get("/userInfo", (req, res) => {
+  userInfo(req, res);
 })
 
 module.exports = router;
