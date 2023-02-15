@@ -77,10 +77,26 @@ function logout(req, res) {
 }
 
 // 단일 회원 정보 조회
+async function loginedUserInfo(req, res){
+  const userId = req.session.userId;
+  
+  const userInfo = await User.findOne({where: {userId: userId}})
+  if(!userInfo) return res.status(404).send('존재하지 않는 정보');
+  return res.status(200).json(userInfo.toJSON());
+}
+
 async function userInfo(req, res){
   const userId = req.session.userId;
   
   const userInfo = await User.findOne({where: {userId: userId}})
+  if(!userInfo) return res.status(404).send('존재하지 않는 정보');
+  return res.status(200).json(userInfo.toJSON());
+}
+
+async function userInfo(req, res){
+  const userId = req.params.userId;
+
+  const userInfo = await User.findOne({where: {userId: userId}});
   if(!userInfo) return res.status(404).send('존재하지 않는 정보');
   return res.status(200).json(userInfo.toJSON());
 }
@@ -90,5 +106,6 @@ module.exports = {
   isLogined,
   signUp,
   logout,
+  loginedUserInfo,
   userInfo,
 };
