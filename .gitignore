@@ -14,3 +14,10 @@ benchmarks/graphs
 # ignore additional files using core.excludesFile
 # https://git-scm.com/docs/gitignore
 .env
+
+upload
+*.jpg
+*.png
+*.jpeg
+
+launch.json

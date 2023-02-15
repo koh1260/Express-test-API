@@ -5,6 +5,9 @@ const { Op } = require("sequelize");
 const { getListObjectValue } = require("./service");
 const { sequelize } = require("sequelize/lib/model");
 
+
+
+
 async function postsView(req, res) {
   if(!req.session.isLogined) return res.status(401).send('로그인 해');
   const userId = req.session.userId;
@@ -42,6 +45,14 @@ async function postsView(req, res) {
   }
 }
 
+
+function imageUpload(req, res){
+
+  console.log(req.file);
+  return res.status(200).send('good');
+}
+
 module.exports = {
   postsView,
+  imageUpload
 };
