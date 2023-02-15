@@ -96,7 +96,12 @@ async function userInfo(req, res){
 async function userInfo(req, res){
   const userId = req.params.userId;
 
-  const userInfo = await User.findOne({where: {userId: userId}});
+  const userInfo = await User.findOne(
+    {
+      attributes: ['nickname', 'profileImage', ],
+      where: {userId: userId}
+    }
+    );
   if(!userInfo) return res.status(404).send('존재하지 않는 정보');
   return res.status(200).json(userInfo.toJSON());
 }
