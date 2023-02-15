@@ -1,8 +1,8 @@
 const { Sequelize, DataTypes, Model, DatabaseError } = require("sequelize");
-const {Post} = require('../post/models');
+const dataTypes = require("sequelize/lib/data-types");
+const { Post } = require("../post/models");
 require("dotenv").config();
-const sequelize = require('../sequelize/sequelize');
-
+const sequelize = require("../sequelize/sequelize");
 
 class User extends Model {}
 User.init(
@@ -31,8 +31,8 @@ User.init(
       allowNull: false,
     },
     profileImage: {
-      type:DataTypes.STRING,
-    }
+      type: DataTypes.STRING,
+    },
   },
   {
     sequelize,
@@ -43,7 +43,7 @@ User.init(
   }
 );
 
-class Follow extends Model{}
+class Follow extends Model {}
 Follow.init(
   {
     following: {
@@ -69,17 +69,44 @@ Follow.init(
     tableName: "follow",
   }
 );
-Follow.removeAttribute('id');
+Follow.removeAttribute("id");
+
+class Like extends Model {}
+Like.init(
+  {
+    like: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: User,
+        key: "userId",
+      },
+    },
+    liked: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: User,
+        key: "userId",
+      },
+    },
+  },
+  {
+    sequelize,
+    createdAt: false,
+    updatedAt: false,
+    modelName: "Like",
+    tableName: "like",
+  }
+);
 
 // 1:N , User Post
 User.hasMany(Post, {
-  foreignKey: 'userId',
+  foreignKey: "userId",
   allowNull: false,
-  onDelete: 'cascade'
-})
+  onDelete: "cascade",
+});
 Post.belongsTo(User, {
-  foreignKey: 'userId'
-})
+  foreignKey: "userId",
+});
 
 // async function update(){
 //   await User.sync({alter: true});
@@ -88,5 +115,6 @@ Post.belongsTo(User, {
 // update()
 
 module.exports = {
-    User, Follow,
+  User,
+  Follow,
 };
