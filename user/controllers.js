@@ -76,15 +76,22 @@ function logout(req, res) {
     });
 }
 
-// 단일 회원 정보 조회
+// 로그인 중인 회원 정보 조회
 async function loginedUserInfo(req, res){
   const userId = req.session.userId;
+  if(!userId) return res.status(400).send('로그인 하세요');
   
-  const userInfo = await User.findOne({where: {userId: userId}})
+  const userInfo = await User.findOne(
+    {
+      attributes: ['nickname', 'profileImage'],
+      where: {userId: userId}
+    }
+    )
   if(!userInfo) return res.status(404).send('존재하지 않는 정보');
   return res.status(200).json(userInfo.toJSON());
 }
 
+// 단일 회원 정보 조회
 async function userInfo(req, res){
   const userId = req.session.userId;
   

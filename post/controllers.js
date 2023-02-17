@@ -4,19 +4,17 @@ const { User, Follow } = require("../user/models");
 const { Op } = require("sequelize");
 const { getListObjectValue } = require("./service");
 const { sequelize } = require("sequelize/lib/model");
-
-
-
+require("dotenv").config();
 
 async function postsView(req, res) {
-  if(!req.session.isLogined) return res.status(401).send('로그인 해');
+  if (!req.session.isLogined) return res.status(401).send("로그인 해");
   const userId = req.session.userId;
 
   try {
     const followingsObj = await Follow.findAll({
       attributes: ["follower"],
       where: {
-        following: userId
+        following: userId,
       },
     });
     if (followingsObj.length === 0) return res.status(200).json([]);
@@ -44,15 +42,31 @@ async function postsView(req, res) {
     console.log(err);
   }
 }
+// 게시글 생성
+async function posting(req, res) {
+  const userId = req.body.userId;
+  const imageURL = `${process.env.BASE_URL}/${req.file.path}`;
+  const content = req.body.content;
+  const post = await Post.create({
+    userId: userId,
+    content: content,
+  });
+  await post.createImage({
+    imageUrl: imageURL,
+  });
 
+  if (Object.keys(post).length === 0)
+    return res.status(400).send("fail");
+  return res.status(200).json(post.toJSON());
+}
 
-function imageUpload(req, res){
-
+function imageUpload(req, res) {
   console.log(req.file);
-  return res.status(200).send('good');
+  return res.status(200).send("good");
 }
 
 module.exports = {
   postsView,
-  imageUpload
+  imageUpload,
+  posting,
 };

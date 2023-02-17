@@ -99,6 +99,7 @@ Like.init(
 );
 
 // 1:N , User Post
+
 User.hasMany(Post, {
   foreignKey: "userId",
   allowNull: false,
@@ -107,6 +108,7 @@ User.hasMany(Post, {
 Post.belongsTo(User, {
   foreignKey: "userId",
 });
+
 
 // async function update(){
 //   await User.sync({alter: true});

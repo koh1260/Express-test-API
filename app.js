@@ -4,9 +4,7 @@ const bodyParser = require("body-parser");
 const auth = require('./router/auth');
 const post = require('./router/post');
 const cors = require("cors");
-// const cookieParser = require('cookie-parser');
 const session = require("express-session");
-// const FileStore = require('session-file-store')(session);
 const MySQLStore = require("express-mysql-session")(session);
 require("dotenv").config();
 
