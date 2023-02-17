@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 // const db = require("../db");
-const { postsView, imageUpload } = require("../post/controllers");
+const { postsView, posting } = require("../post/controllers");
 const multer = require('multer');
 const path = require('path');
 const upload = multer({
@@ -16,11 +16,15 @@ const upload = multer({
   });
 
 router.post('/image', upload.single('postImage'), (req, res)=>{
-
+    console.log(req.file);
 })
 
 router.get('/test', (req,res) => {
     postsView(req, res);
 });
+// 게시글 업로드
+router.post('/posting', upload.single('postImage'), (req, res)=> {
+    posting(req, res);
+})
 
 module.exports = router;

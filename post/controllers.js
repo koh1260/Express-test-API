@@ -45,13 +45,13 @@ async function postsView(req, res) {
 // 게시글 생성
 async function posting(req, res) {
   const userId = req.body.userId;
-  const imageURL = `${process.env.BASE_URL}/${req.file.path}`;
+  const imageURL = `${process.env.BASE_URL}/${req.file.filename}`;
   const content = req.body.content;
   const post = await Post.create({
     userId: userId,
     content: content,
   });
-  await post.createImage({
+  const image = await post.createImage({
     imageUrl: imageURL,
   });
 
@@ -60,13 +60,7 @@ async function posting(req, res) {
   return res.status(200).json(post.toJSON());
 }
 
-function imageUpload(req, res) {
-  console.log(req.file);
-  return res.status(200).send("good");
-}
-
 module.exports = {
   postsView,
-  imageUpload,
   posting,
 };

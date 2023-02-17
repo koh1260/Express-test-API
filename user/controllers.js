@@ -62,7 +62,7 @@ async function signUp(req, res) {
       password: hash,
       profileImage: signUpData.profileImage,
     });
-    return res.status(200).send(newUser);
+    return res.status(200).send('회원가입 완료');
   } catch (err) {
     console.log(err);
   }
@@ -83,7 +83,7 @@ async function loginedUserInfo(req, res){
   
   const userInfo = await User.findOne(
     {
-      attributes: ['nickname', 'profileImage'],
+      attributes: ['userId','nickname', 'profileImage'],
       where: {userId: userId}
     }
     )
