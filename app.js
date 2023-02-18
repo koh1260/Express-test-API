@@ -3,6 +3,7 @@ const app = express();
 const bodyParser = require("body-parser");
 const auth = require('./router/auth');
 const post = require('./router/post');
+const comment = require('./router/comment');
 const cors = require("cors");
 const session = require("express-session");
 const MySQLStore = require("express-mysql-session")(session);
@@ -21,6 +22,7 @@ const sessionStore = new MySQLStore(dbOptions);
 
 // use
 // app.use(cookieParser());
+app.use(express.static('uploads'));
 app.use(
   session({
     key: "session_cookie_name",
@@ -44,7 +46,8 @@ app.use(bodyParser.json());
 app.use('/auth', auth);
 // post
 app.use('/post', post);
-
+// comment
+app.use('/comment', comment);
 
 app.listen(process.env.SERVER_PORT, () => {
   console.log(`Run Server`);

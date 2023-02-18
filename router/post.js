@@ -15,10 +15,6 @@ const upload = multer({
     }),
   });
 
-router.post('/image', upload.single('postImage'), (req, res)=>{
-    console.log(req.file);
-})
-
 router.get('/test', (req,res) => {
     postsView(req, res);
 });
