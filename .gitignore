@@ -21,3 +21,5 @@ upload
 *.jpeg
 
 launch.json
+config
+.sequelizerc

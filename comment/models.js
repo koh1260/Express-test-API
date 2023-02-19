@@ -1,10 +1,11 @@
 const { Sequelize, DataTypes, Model, DatabaseError } = require("sequelize");
 require("dotenv").config();
 const sequelize = require('../sequelize/sequelize');
-const User = require('../user/models');
-const Post = require('../post/models');
+const {User} = require('../user/models');
+const {Post} = require('../post/models');
 
-
+console.log('comments Post: ', Post);
+console.log('comments User: ', User);
 class Comment extends Model{}
 Comment.init(
   {
@@ -68,9 +69,25 @@ CommentLikes.init(
     tableName: "commentLikes",
   }
 );
-
 CommentLikes.removeAttribute('id'); // id 삭제
+
+// Comment.belongsTo(Post, {
+//   foreignKey: 'postId'
+// });
+// Comment.belongsTo(User,{
+//   foreignKey: 'userId'
+// });
+// Comment.hasMany(CommentLikes, {
+//   foreignKey: 'commentId'
+// });
+// CommentLikes.belongsTo(User, {
+//   foreignKey: 'userId'
+// });
+// CommentLikes.belongsTo(Comment, {
+//   foreignKey: 'commentId'
+// });
 
 module.exports = {
     Comment, 
+    CommentLikes
 }

@@ -17,4 +17,34 @@ const sequelize = new Sequelize(
   }
 );
 
+const {User, Follow} = require('../user/models');
+const {Post} = require('../post/models');
+console.log('sequelize User:',User);
+console.log('sequelize Post:',Post);
+// User.hasMany(Follow, {
+//   foreignKey: 'following',
+//   allowNull: false,
+//   onDelete: 'cascade'
+// });
+// User.hasMany(Follow, {
+//   foreignKey: 'follower',
+//   allowNull: false,
+//   onDelete: 'cascade'
+// });
+// Follow.belongsTo(User, {
+//   foreignKey: 'following'
+// });
+// Follow.belongsTo(User, {
+//   foreignKey: 'follower'
+// });
+// async function update(){
+//   await User.sync();
+//   await Follow.sync();
+// }
+// update()
+// async function syncModel(){
+//   await sequelize.sync({force:true});
+// }
+// syncModel();
+
 module.exports = sequelize;

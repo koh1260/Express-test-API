@@ -1,8 +1,11 @@
 const { Sequelize, DataTypes, Model, DatabaseError } = require("sequelize");
 const dataTypes = require("sequelize/lib/data-types");
-const { Post } = require("../post/models");
+const { Post, PostLikes } = require("../post/models");
+const {CommentLikes, Comment} = require('../comment/models');
 require("dotenv").config();
 const sequelize = require("../sequelize/sequelize");
+
+console.log('users Post: ',Post);
 
 class User extends Model {}
 User.init(
@@ -46,20 +49,7 @@ User.init(
 class Follow extends Model {}
 Follow.init(
   {
-    following: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: User,
-        key: "userId",
-      },
-    },
-    follower: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: User,
-        key: "userId",
-      },
-    },
+
   },
   {
     sequelize,
@@ -71,50 +61,34 @@ Follow.init(
 );
 Follow.removeAttribute("id");
 
-class Like extends Model {}
-Like.init(
-  {
-    like: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: User,
-        key: "userId",
-      },
-    },
-    liked: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: User,
-        key: "userId",
-      },
-    },
-  },
-  {
-    sequelize,
-    createdAt: false,
-    updatedAt: false,
-    modelName: "Like",
-    tableName: "like",
-  }
-);
 
 // 1:N , User Post
 
-User.hasMany(Post, {
-  foreignKey: "userId",
-  allowNull: false,
-  onDelete: "cascade",
-});
-Post.belongsTo(User, {
-  foreignKey: "userId",
-});
+// User.hasMany(Comment, {
+//   foreignKey: 'userId',
+//   allowNull: false,
+//   onDelete: 'cascade'
+// });
+// User.hasMany(CommentLikes, {
+//   foreignKey: 'following',
+//   allowNull:false,
+//   onDelete: 'cascade'
+// });
+// User.hasMany(CommentLikes, {
+//   foreignKey: 'follower',
+//   allowNull:false,
+//   onDelete: 'cascade'
+// });
+// User.hasMany(PostLikes, {
+//   foreignKey: 'userId'
+// });
+
+// Post.belongsTo(User, {
+//   foreignKey: "userId",
+// });
 
 
-// async function update(){
-//   await User.sync({alter: true});
-//   await Post.sync({alter: true});
-// }
-// update()
+
 
 module.exports = {
   User,
