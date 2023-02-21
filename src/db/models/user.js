@@ -1,51 +1,62 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
-module.exports = (sequelize, DataTypes) => {
-  class User extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
-    static associate(models) {
-      // define association here
+const Sequelize = require("sequelize");
+
+class User extends Sequelize.Model {
+  static initiate(sequelize) {
+    User.init({
+      userId: {
+        type: Sequelize.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+      },
+      email: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        unique: true,
+      },
+      name: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      nickname: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        unique: true,
+      },
+      password: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      profileImage: {
+        type: Sequelize.STRING,
+      },      
+    },
+    {
+      sequelize,
+      createdAt: false,
+      updatedAt: false,
+      modelName: "User",
+      tableName: "user",
+      charset: 'utf8mb4',
+      collate: 'utf8mb4_general_ci'
     }
+    );
   }
-  User.init({
-    userId: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      autoIncrement: true,
-      allowNull:false,
-    },
-    email: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true,
-    },
-    name: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    nickname: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true,
-    },
-    password: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    profileImage: {
-      type: DataTypes.STRING,
-    },
-  }, {
-    sequelize,
-    createdAt: false,
-    updatedAt: false,
-    modelName: 'User',
-  });
-  return User;
+  static associate(db){
+    db.User.hasMany(db.Post, {
+      foreignKey: 'userId',
+      onDelete: 'cascade',
+      onUpdate: 'cascade',
+      sourceKey: 'userId'
+    });
+    db.User.belongsToMany(db.Post, {
+      through: 'postLike',
+      foreignKey: 'userId'
+    });
+    db.User.belongsToMany(db.Comment, {
+      through: 'commentLike',
+      foreignKey: 'userId'
+    });
+  }
 };
+
+module.exports = User;
