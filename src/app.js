@@ -51,12 +51,12 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 
-// // auth
-// app.use('/auth', auth);
-// // post
-// app.use('/post', post);
-// // comment
-// app.use('/comment', comment);
+// auth
+app.use('/auth', auth);
+// post
+app.use('/post', post);
+// comment
+app.use('/comment', comment);
 
 app.listen(process.env.SERVER_PORT, () => {
   console.log(`Run Server`);

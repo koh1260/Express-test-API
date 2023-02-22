@@ -1,9 +1,10 @@
-const { Post, Image } = require("./models");
-const { Comment } = require("../comment/models");
-const { User, Follow } = require("../user/models");
+const Post = require('../db/models/post');
+const Image = require('../db/models/image');
+const Comment = require("../db/models/comment");
+const User = require("../db/models/user");
+const Follow = require('../db/models/follow');
 const { Op } = require("sequelize");
-const { getListObjectValue } = require("./service");
-const { sequelize } = require("sequelize/lib/model");
+const { getListObjectValue } = require("../service/postService");
 require("dotenv").config();
 
 async function postsView(req, res) {

@@ -1,4 +1,4 @@
-const { User } = require("./models");
+const User = require("../db/models/user");
 const bcrypt = require("bcrypt");
 
 // 로그인

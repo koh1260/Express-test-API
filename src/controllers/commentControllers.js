@@ -1,6 +1,5 @@
-const { _getIncludedAssociation } = require("sequelize/lib/model");
-const { Comment } = require("./models");
-const { User } = require("../user/models");
+const Comment = require("../db/models/comment");
+const User = require("../db/models/user");
 
 async function writingComment(req, res) {
   const userId = req.session.userId;
