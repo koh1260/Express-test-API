@@ -1,4 +1,5 @@
 const Sequelize = require("sequelize");
+const User = require("./user");
 
 class Post extends Sequelize.Model {
   static initiate(sequelize) {
@@ -12,7 +13,12 @@ class Post extends Sequelize.Model {
         content: {
           type: Sequelize.STRING,
         },
-        // userId
+        userId: {
+          type: Sequelize.INTEGER,
+          references: {
+            model: User
+          }
+        }
       },
       {
         sequelize,
@@ -27,7 +33,8 @@ class Post extends Sequelize.Model {
     db.Post.belongsTo(db.User, {
         foreignKey: 'userId',
         onDelete: 'cascade',
-        onUpdate: 'cascade'
+        onUpdate: 'cascade',
+        allowNull:false
     });
     db.Post.hasMany(db.Comment, {
         foreignKey: 'postId',
