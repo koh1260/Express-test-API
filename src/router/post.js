@@ -31,7 +31,7 @@ router.post('/posting', upload.single('postImage'), (req, res)=> {
   console.log(req.file);  
     posting(req, res);
 });
-router.post('/logined-post', (req, res) => {
+router.get('/logined-post', (req, res) => {
   loginedPost(req, res);
 });
 
