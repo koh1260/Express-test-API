@@ -66,7 +66,28 @@ async function posting(req, res) {
   return res.status(200).json(post.toJSON());
 }
 
+// 로그인 중인 유저 게시글 조회
+async function loginedPost(req, res){
+  const userId = req.session.userId;
+
+  const posts = await db.Post.findAll(
+    {
+      where: {
+        userId : userId
+      },
+      include: {
+        model: db.Image,
+        attributes: ['imageUrl']
+      }
+    }
+  );
+  if(posts.length === 0) return res.status(404).send('no posts');
+  const postsList = posts.map((post) => post.toJSON());
+  return res.status(200).json(postsList);
+}
+
 module.exports = {
   postsView,
   posting,
+  loginedPost,
 };

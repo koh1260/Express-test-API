@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { postsView, posting } = require("../controllers/postController");
+const { postsView, posting, loginedPost } = require("../controllers/postController");
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
@@ -30,6 +30,9 @@ router.get('/test', (req,res) => {
 router.post('/posting', upload.single('postImage'), (req, res)=> {
   console.log(req.file);  
     posting(req, res);
-})
+});
+router.post('/logined-post', (req, res) => {
+  loginedPost(req, res);
+});
 
 module.exports = router;
