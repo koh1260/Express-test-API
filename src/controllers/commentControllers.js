@@ -1,5 +1,6 @@
 const Comment = require("../db/models/comment");
 const User = require("../db/models/user");
+const db = require("../db/models/index");
 
 async function writingComment(req, res) {
   const userId = req.session.userId;
@@ -7,7 +8,7 @@ async function writingComment(req, res) {
   const content = req.body.content;
   const parentId = req.body.parentId;
 
-  const comment = await Comment.create({
+  const comment = await db.Comment.create({
     userId: userId,
     postId: postId,
     content: content,
@@ -21,15 +22,18 @@ async function commentView(req, res) {
   const postId = req.params.postId;
 
   try {
-    const comment = await Comment.findAll({
-      attributes: ["commentId", "content", "createAt", "parentId"],
-      where:{
-        postId: postId
+    const comment = await db.Comment.findAll({
+      attributes: ["commentId", "content", "createdAt", "parentId"],
+      where: {
+        postId: postId,
       },
-      include: {
-        model: User,
-        required: true,
-      },
+      include: [
+        {
+          model: db.User,
+          attributes: ['nickname', 'profileImage'],
+          required: true,
+        },
+      ],
     });
     return res.status(200).json(comment);
   } catch (err) {
@@ -37,6 +41,6 @@ async function commentView(req, res) {
   }
 }
 module.exports = {
-    writingComment,
-    commentView,
-  };
+  writingComment,
+  commentView,
+};
