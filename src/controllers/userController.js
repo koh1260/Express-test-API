@@ -19,9 +19,10 @@ async function login(req, res) {
     if (req.session.user === undefined) {
       req.session.isLogined = true;
       req.session.userId = user[0].userId;
+      req.session.nickname = user[0].nickname;
     }
     req.session.save(() => {
-      return res.status(200).send('로그인 성공');
+      return res.status(200).json({nickname: user[0].nickname});
     });
   } catch (err) {
     console.log(err);
@@ -106,6 +107,19 @@ async function userInfo(req, res){
   return res.status(200).json(userInfo.toJSON());
 }
 
+async function userInfoByNickname(req, res){
+  const nickname = req.params.nickname;
+
+  const userInfo = await User.findOne(
+    {
+      attributes: {exclude: ["password", "userId", "email"]},
+      where: {nickname: nickname}
+    }
+    );
+  if(!userInfo) return res.status(404).send('존재하지 않는 정보');
+  return res.status(200).json(userInfo.toJSON());
+}
+
 module.exports = {
   login,
   isLogined,
@@ -113,4 +127,5 @@ module.exports = {
   logout,
   loginedUserInfo,
   userInfo,
+  userInfoByNickname
 };
