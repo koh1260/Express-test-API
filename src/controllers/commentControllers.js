@@ -22,7 +22,7 @@ async function commentView(req, res) {
   const postId = req.params.postId;
 
   try {
-    const comment = await db.Comment.findAll({
+    const comments = await db.Comment.findAll({
       attributes: ["commentId", "content", "createdAt", "parentId"],
       where: {
         postId: postId,
@@ -35,7 +35,13 @@ async function commentView(req, res) {
         },
       ],
     });
-    return res.status(200).json(comment);
+    const commentsList = comments.map((comment) => comment.toJSON());
+    // 날짜 순으로 내림차순 정렬
+    commentsList.sort((a, b) => {
+        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+    }).reverse();
+
+    return res.status(200).json(commentsList);
   } catch (err) {
     return res.status(500).send(err);
   }
