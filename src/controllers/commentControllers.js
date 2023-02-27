@@ -38,7 +38,7 @@ async function commentView(req, res) {
     const commentsList = comments.map((comment) => comment.toJSON());
     // 날짜 순으로 내림차순 정렬
     commentsList.sort((a, b) => {
-        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+        new Date(a.createdAt) - new Date(b.createdAt);
     }).reverse();
 
     return res.status(200).json(commentsList);
