@@ -1,6 +1,7 @@
 const db = require("../db/models/index");
 const { Op } = require("sequelize");
 const { getListObjectValue } = require("../service/postService");
+const { findAll } = require("../db/models/comment");
 require("dotenv").config();
 
 async function postsView(req, res) {
@@ -86,6 +87,21 @@ async function loginedPost(req, res) {
   if (posts.length === 0) return res.status(404).send("no posts");
   const postsList = posts.map((post) => post.toJSON());
   return res.status(200).json(postsList);
+}
+
+// 게시글 좋아요
+async function postLike(req, res){
+  const userId = req.session.userId;
+  const postId = req.body.postId;
+  
+  const like = await db.User.findByPk(userId, {
+    include: [
+      {
+        model: db.Post,
+              
+      }
+    ]
+  })
 }
 
 module.exports = {

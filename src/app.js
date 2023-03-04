@@ -32,13 +32,17 @@ const sessionStore = new MySQLStore(dbOptions);
 // use
 // app.use(cookieParser());
 app.use(express.static('uploads'));
+
+// session 유효 시간 10분, 새로고침이나 페이지 이동 시 초기화.
 app.use(
   session({
     key: "session_cookie_name",
     secret: process.env.SESSION_SECRET,
     store: sessionStore,
     resave: false,
-    saveUninitialized: false,
+    saveUninitialized: true,
+    cookie: {maxAge: 600000},
+    rolling: true
   })
 );
 

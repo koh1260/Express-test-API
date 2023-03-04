@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { login, signUp, loginedUserInfo, logout, userInfo } = require("../controllers/userController");
+const { login, signUp, loginedUserInfo, logout, userInfo, userInfoByNickname } = require("../controllers/userController");
 
 
 // 로그인
@@ -21,6 +21,9 @@ router.get("/logined-user", (req, res) => {
 })
 router.get("/user/:userId", (req, res) => {
   userInfo(req, res);
+})
+router.get("/user-nickname/:nickname", (req, res) => {
+  userInfoByNickname(req, res);
 })
 
 module.exports = router;
