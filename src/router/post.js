@@ -23,7 +23,7 @@ const upload = multer({
     }),
   });
 
-router.get('/test', (req,res) => {
+router.get('/posts-view', (req,res) => {
   postsView(req, res);
 });
 // 게시글 업로드
