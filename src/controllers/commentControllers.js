@@ -1,6 +1,7 @@
 const Comment = require("../db/models/comment");
 const User = require("../db/models/user");
 const db = require("../db/models/index");
+const { count } = require("../db/models/comment");
 
 async function writingComment(req, res) {
   const userId = req.session.userId;
@@ -46,7 +47,23 @@ async function commentView(req, res) {
     return res.status(500).send(err);
   }
 }
+
+async function commentCounts(req, res){
+  const postId = req.params.postId;
+
+  try{
+    const count = await db.Comment.count({
+      where: {postId: postId}
+    });
+    return res.status(200).json(count);
+  }catch(err){
+    console.log(err);
+  }
+}
+
+
 module.exports = {
   writingComment,
   commentView,
+  commentCounts
 };
